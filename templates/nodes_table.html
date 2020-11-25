@@ -5,6 +5,9 @@
             Адрес
         </td>
         <td>
+            IP-Адрес
+        </td>
+        <td>
             Дата истечения сертификата RSA
         </td>
         <td>
@@ -22,11 +25,11 @@
         <tr>
     {% elif node.status == 'down' %}
         <tr class="bg-danger">
-    {% elif node.status == 'warning' %}
+    {% elif node.status == 'expiring' %}
         <tr class="bg-warning">
     {% endif %}
-        <!--            <td>{{ node.name }}-->
-        <!--            </td>-->
+        <td>{{ node.name }}
+        </td>
         <td>
             <a href="http://{{ node.address }}" class="text-decoration-none text-reset">{{ node.address }}</a>
         </td>
@@ -41,7 +44,7 @@
                 Работает
             {% elif node.status == 'down' %}
                 Недоступен
-            {% elif node.status == 'warning' %}
+            {% elif node.status == 'expiring' %}
                 Срок действия сертификата заканчивается
             {% endif %}
         </td>

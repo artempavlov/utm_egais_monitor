@@ -9,7 +9,7 @@ class API(object):
         self.ip = ip
         self.port = port
         self.last_checked = None
-        self.up = False
+        self.is_up = False
         self.status_code = None
         self.rsa_certificate_good = None
         self.rsa_certificate_expiry_date = None
@@ -28,10 +28,6 @@ class API(object):
     def address(self):
         return self.ip + ':' + self.port
 
-    @property
-    def name(self):
-        return self.address
-
     def update(self):
         try:
             r = requests.get('http://'+self.ip+':'+self.port)
@@ -40,11 +36,11 @@ class API(object):
                 bs = BeautifulSoup(r.text, features="lxml")
                 self.rsa_certificate_expiry_date = parse(bs.find(string='Сертификат RSA').findNext('div').contents[0].split(' по ')[1])
                 self.gost_certificate_expiry_date = parse(bs.find(string='Сертификат ГОСТ').findNext('div').contents[0].split(' по ')[1])
-                self.up = True
+                self.is_up = True
                 return True
             else:
-                self.up = False
+                self.is_up = False
                 return False
         except:
-            self.up = False
+            self.is_up = False
             return False
