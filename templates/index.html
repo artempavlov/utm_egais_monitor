@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+{% include "head.html" %}
+<body>
+<table class="table table-striped table-dark">
+    <tbody>
+    <tr class="thead-dark">
+        <td>Адрес
+        </td>
+        <td>Дата истечения сертификата RSA
+        </td>
+        <td>Дата истечения сертификата ГОСТ
+        </td>
+        <td>Статус
+        </td>
+    </tr>
+    {% for node in nodes %}
+    {% if node.status == 'up'%}
+    <tr>
+        {% elif node.status == 'down' %}
+    <tr class="bg-danger">
+        {% elif node.status == 'warning' %}
+    <tr class="bg-warning">
+        {% endif %}
+        <!--            <td>{{ node.name }}-->
+        <!--            </td>-->
+        <td>{{ node.address }}
+        </td>
+        <td>{{ node.rsa_certificate_expiry_date }}
+        </td>
+        <td>{{ node.gost_certificate_expiry_date }}
+        </td>
+        <td>{{ node.status }}
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</body>
+</html>

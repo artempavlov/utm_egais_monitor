@@ -17,11 +17,19 @@ class API(object):
 
     @property
     def rsa_certificate_time_left(self):
-        return self.rsa_certificate_expiry_date - datetime.datetime.now() if self.rsa_certificate_expiry_date is not None else None
+        return self.rsa_certificate_expiry_date - datetime.datetime.now(datetime.timezone.utc) if self.rsa_certificate_expiry_date is not None else None
 
     @property
     def gost_certificate_time_left(self):
-        return self.gost_certificate_expiry_date - datetime.datetime.now() if self.gost_certificate_expiry_date is not None else None
+        return self.gost_certificate_expiry_date - datetime.datetime.now(datetime.timezone.utc) if self.gost_certificate_expiry_date is not None else None
+
+    @property
+    def address(self):
+        return self.ip + ':' + self.port
+
+    @property
+    def name(self):
+        return self.address
 
     def update(self):
         try:

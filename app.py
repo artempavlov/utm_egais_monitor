@@ -4,23 +4,6 @@ from pebble import ThreadPool, concurrent
 from prometheus_client import start_http_server, Info, Gauge
 
 
-# class Node(object):
-#     def __init__(self, ip, port):
-#         self.api = API(ip, port)
-#         #self.up = Gauge(('up' + ip + ':' + port).replace('.', '_'), 'Up')
-#         #c.labels('get', '/')
-#
-#     def update(self):
-#         self.api.update()
-#         self.up.set(int(self.api.up))
-# class DownList(object):
-#     def __init__(self):
-#         self.down_list = []
-#         self.info = Info('down_list', 'list of unavailable nodes')
-#
-#     def reset(self):
-#         self.down_list
-
 
 class Metrics(object):
     def __init__(self):
@@ -38,22 +21,26 @@ class Metrics(object):
         self.down_list.info({'Down': '\n'.join(addresses)})
 
 
-
 class Monitor(object):
-    def __init__(self):
+    def __init__(self, web_server):
         self.nodes = []
         self.metrics = Metrics()
+        self.web_app = web_server
+        #WebServer.register(self.web_app)
         addresses = self.load_addresses()
         for address in addresses:
             self.nodes.append(API(address[0], address[1]))
+        #self.web_app.run()
 
     def load_addresses(self):
         with open('addresses.txt') as f:
             addresses = [elem.strip().split(':') for elem in f.readlines()]
         return addresses
 
+    @concurrent.thread
     def run(self):
-        self.run_prometheus_node()
+        #self.run_prometheus_node()
+        #self.web_app.run()
         while True:
             pool = ThreadPool(max_workers=100)
             status = []
@@ -66,19 +53,21 @@ class Monitor(object):
                 self.metrics.set_is_up(node.ip, node.port, node.up)
                 if not node.up:
                     nodes_down.append(node.ip + ':' + node.port)
-                #if node.up:
-                    #status.append([node.api.ip+':'+node.api.port, node.up, node.api.rsa_certificate_expiry_date])
-                #else:
-                    #status.append([node.api.ip+':'+node.api.port, node.api.up])
-                #print(node.api.ip+':'+node.api.port, node.api.up, node.api.rsa_certificate_expiry_date)
-            #print(status)
             self.metrics.set_down_list(nodes_down)
-            time.sleep(5)
+            print(nodes_down)
+            time.sleep(300)
 
     @concurrent.thread
     def run_prometheus_node(self):
         start_http_server(38000)
 
 
-if __name__ == '__main__':
-    Monitor().run()
+# if __name__ == '__main__':
+#
+#     #web_server = WebServer()
+#
+#     app = Monitor()
+#     app.run()
+#     #web_app = Flask('UTM EGAIS Monitor')
+#     # web_server import *
+#     #web_app.run()
