@@ -1,0 +1,58 @@
+<table class="table table-striped table-dark">
+    <tbody>
+    <tr class="thead-dark">
+        <td>
+            Адрес
+        </td>
+        <td>
+            Дата истечения сертификата RSA
+        </td>
+        <td>
+            Дата истечения сертификата ГОСТ
+        </td>
+        <td>
+            Статус
+        </td>
+        <td>
+            Код состояния HTTP
+        </td>
+    </tr>
+    {% for node in nodes %}
+    {% if node.status == 'up'%}
+        <tr>
+    {% elif node.status == 'down' %}
+        <tr class="bg-danger">
+    {% elif node.status == 'warning' %}
+        <tr class="bg-warning">
+    {% endif %}
+        <!--            <td>{{ node.name }}-->
+        <!--            </td>-->
+        <td>
+            <a href="http://{{ node.address }}" class="text-decoration-none text-reset">{{ node.address }}</a>
+        </td>
+        <td>
+            {{ node.rsa_certificate_expiry_date }}
+        </td>
+        <td>
+            {{ node.gost_certificate_expiry_date }}
+        </td>
+        <td>
+            {% if node.status == 'up'%}
+                Работает
+            {% elif node.status == 'down' %}
+                Недоступен
+            {% elif node.status == 'warning' %}
+                Срок действия сертификата заканчивается
+            {% endif %}
+        </td>
+        <td>
+            {% if node.status_code is none %}
+                Нет ответа
+            {% else %}
+                {{ node.status_code }}
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>

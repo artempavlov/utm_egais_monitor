@@ -1,8 +1,8 @@
 from api import API
+from web_server import WebServer
 import time
 from pebble import ThreadPool, concurrent
 from prometheus_client import start_http_server, Info, Gauge
-
 
 
 class Metrics(object):
@@ -22,39 +22,37 @@ class Metrics(object):
 
 
 class Monitor(object):
-    def __init__(self, web_server):
+    def __init__(self):
         self.nodes = []
-        self.metrics = Metrics()
-        self.web_app = web_server
-        #WebServer.register(self.web_app)
+        #self.metrics = Metrics()
+        self.web_app = WebServer(self)
+        self.nodes_down = []
         addresses = self.load_addresses()
         for address in addresses:
             self.nodes.append(API(address[0], address[1]))
-        #self.web_app.run()
 
     def load_addresses(self):
         with open('addresses.txt') as f:
             addresses = [elem.strip().split(':') for elem in f.readlines()]
         return addresses
 
-    @concurrent.thread
     def run(self):
         #self.run_prometheus_node()
-        #self.web_app.run()
+        self.web_app.run()
         while True:
             pool = ThreadPool(max_workers=100)
-            status = []
             for node in self.nodes:
                 pool.schedule(node.update)
             pool.close()
             pool.join()
-            nodes_down = []
+            nodes_down_new = []
             for node in self.nodes:
-                self.metrics.set_is_up(node.ip, node.port, node.up)
+                #self.metrics.set_is_up(node.ip, node.port, node.up)
                 if not node.up:
-                    nodes_down.append(node.ip + ':' + node.port)
-            self.metrics.set_down_list(nodes_down)
-            print(nodes_down)
+                    #nodes_down.append(node.ip + ':' + node.port)
+                    nodes_down_new.append(node)
+            #self.metrics.set_down_list(nodes_down)
+            self.nodes_down = nodes_down_new
             time.sleep(300)
 
     @concurrent.thread
@@ -62,12 +60,3 @@ class Monitor(object):
         start_http_server(38000)
 
 
-# if __name__ == '__main__':
-#
-#     #web_server = WebServer()
-#
-#     app = Monitor()
-#     app.run()
-#     #web_app = Flask('UTM EGAIS Monitor')
-#     # web_server import *
-#     #web_app.run()
