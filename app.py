@@ -29,7 +29,6 @@ class Monitor(object):
 
     def load_nodes(self):
         with open('nodes.txt', encoding='utf-8') as f:
-            #addresses = [elem.strip().split(':') for elem in f.readlines()]
             for line in f.readlines():
                 name, ip, port = re.split(r'\t+', line)
                 self.nodes.append(Node(ip, port, name=name))

@@ -31,19 +31,19 @@ class WebServer(object):
         nodes_data = []
         for node in self.app.nodes:
             nodes_data.append(self.get_node_info(node))
-        return render_template('index.html', nodes=nodes_data)
+        return render_template('index.html', nodes=nodes_data, active_page='index')
 
     def down(self):
         nodes_data = []
         for node in self.app.nodes_down:
             nodes_data.append(self.get_node_info(node))
-        return render_template('down.html', nodes=nodes_data)
+        return render_template('down.html', nodes=nodes_data, active_page='down')
 
     def expiring(self):
         nodes_data = []
         for node in self.app.nodes_expiring:
             nodes_data.append(self.get_node_info(node))
-        return render_template('expiring.html', nodes=nodes_data)
+        return render_template('expiring.html', nodes=nodes_data, active_page='expiring')
 
     def get_node_info(self, node):
         if not node.is_up:
