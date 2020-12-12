@@ -1,0 +1,15 @@
+[general]
+log_path = 'logs/log.txt'
+# path or false
+redirect_output = 'logs/output.txt'
+#redirect_output = false
+# path or false
+redirect_traceback = 'logs/traceback.txt'
+#redirect_traceback = false
+
+storage_file_path = 'storage/data.bin'
+import_nodes_from_file = false
+nodes_list_file = 'nodes.txt'
+
+days_to_mark_expiring = 14
+refresh_delay_seconds = 300

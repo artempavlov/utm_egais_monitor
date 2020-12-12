@@ -1,5 +1,4 @@
-from app import Monitor
+from app import App
 
 
-monitor = Monitor()
-monitor.run()
+app = App()

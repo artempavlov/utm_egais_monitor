@@ -5,7 +5,7 @@
             Адрес
         </td>
         <td>
-            IP-Адрес
+            Ссылка
         </td>
         <td>
             Дата истечения сертификата RSA
@@ -31,7 +31,7 @@
         <td>{{ node.name }}
         </td>
         <td>
-            <a href="http://{{ node.address }}" class="text-decoration-none text-reset">{{ node.address }}</a>
+            <a href="{{ node.address }}" class="text-decoration-none text-reset">{{ node.address }}</a>
         </td>
         <td>
             {{ node.rsa_certificate_expiry_date }}

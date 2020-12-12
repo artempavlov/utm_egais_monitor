@@ -1,0 +1,7 @@
+toml
+bs4
+requests
+python-dateutil
+pebble
+flask
+lxml
