@@ -1,5 +1,6 @@
 from flask import Flask, render_template
 from pebble import concurrent
+from waitress import serve
 
 
 def plural_days(n):
@@ -25,7 +26,7 @@ class WebServer(object):
 
     @concurrent.thread
     def run(self):
-        self.web_app.run()
+        serve(self.web_app, host=self.app.cfg['general']['host'], port=self.app.cfg['general']['port'])
 
     def index(self):
         nodes_data = []

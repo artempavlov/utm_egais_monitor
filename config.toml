@@ -1,4 +1,8 @@
 [general]
+
+host = '127.0.0.1'
+port = '8080'
+
 log_path = 'logs/log.txt'
 # path or false
 redirect_output = 'logs/output.txt'
